@@ -21,7 +21,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Python context setup:
-RUN pip install --no-cache-dir --upgrade pip pip-tools setuptools
+RUN pip install --no-cache-dir --upgrade pip pip-tools "setuptools<71"
 
 # ================ ENVIRONMENT
 ENV PYTHONUNBUFFERED=1
@@ -38,7 +38,7 @@ RUN npm install --location=global sfdx-cli --ignore-scripts
 
 # Python requirements:
 COPY ./requirements requirements
-RUN pip install --no-cache-dir --upgrade pip pip-tools setuptools \
+RUN pip install --no-cache-dir --upgrade pip pip-tools "setuptools<71" \
     && pip install --no-cache-dir -r requirements/prod.txt
 
 # JS client setup:
@@ -59,7 +59,7 @@ RUN if [ "${BUILD_ENV}" = "production" ] || [ -n "${PROD_ASSETS}" ] ; then yarn 
 # that matches the structure of the real value to launch the application.
 # setuptools must be reinstalled here because prod.txt strips it
 # and CumulusCI requires pkg_resources at import time.
-RUN pip install --no-cache-dir setuptools && \
+RUN pip install --no-cache-dir "setuptools<71" && \
   DB_ENCRYPTION_KEY="Ul-OySkEawSxUc7Ck13Twu2109IzIFh54C1WXO9KAFE=" \
   GITHUB_TOKEN="sample token" \
   SFDX_CLIENT_SECRET="sample secret" \
