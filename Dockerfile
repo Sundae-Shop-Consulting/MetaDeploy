@@ -55,6 +55,9 @@ ARG PROD_ASSETS
 # Avoid building prod assets in development
 RUN if [ "${BUILD_ENV}" = "production" ] || [ -n "${PROD_ASSETS}" ] ; then yarn prod ; else mkdir -p dist/prod ; fi
 
+# Ensure setuptools is available for CumulusCI (pkg_resources)
+RUN pip install --no-cache-dir setuptools
+
 # This is not a real key! It is present because we need a key
 # that matches the structure of the real value to launch the application.
 RUN \
