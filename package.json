@@ -154,9 +154,6 @@
     "webpack-dev-server": "^4.9.3",
     "webpack-merge": "^5.8.0"
   },
-  "optionalDependencies": {
-    "@omnistudio/omniscript-lwc-compiler": "^252.6.0"
-  },
   "resolutions": {
     "@storybook/**/ansi-regex": "^5.0.1",
     "@storybook/**/glob-parent": "^5.1.2",

@@ -1,6 +1,5 @@
 ARG BUILD_ENV=development
 ARG PROD_ASSETS
-ARG OMNIOUT_TOKEN
 FROM node:22 AS node_base
 FROM python:3.12
 
@@ -22,7 +21,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Python context setup:
-RUN pip install --no-cache-dir --upgrade pip pip-tools
+RUN pip install --no-cache-dir --upgrade pip pip-tools setuptools
 
 # ================ ENVIRONMENT
 ENV PYTHONUNBUFFERED=1
@@ -33,24 +32,25 @@ WORKDIR /app
 # Env setup:
 ENV PYTHONPATH=/app
 ENV DJANGO_SETTINGS_MODULE=config.settings.production
-ENV OMNIOUT_TOKEN=${OMNIOUT_TOKEN}
 
 # Install sfdx
 RUN npm install --location=global sfdx-cli --ignore-scripts
 
 # Python requirements:
 COPY ./requirements requirements
-RUN pip install --no-cache-dir --upgrade pip pip-tools \
+RUN pip install --no-cache-dir --upgrade pip pip-tools setuptools \
     && pip install --no-cache-dir -r requirements/prod.txt
-RUN pip install --no-cache-dir -r requirements/dev.txt
 
 # JS client setup:
-COPY ./.npmrc .npmrc
 COPY ./package.json package.json
 COPY ./yarn.lock yarn.lock
 RUN yarn install --ignore-optional --check-files
 
 COPY . /app
+
+# Re-declare BUILD_ENV after FROM so it's available
+ARG BUILD_ENV=development
+ARG PROD_ASSETS
 
 # Avoid building prod assets in development
 RUN if [ "${BUILD_ENV}" = "production" ] || [ -n "${PROD_ASSETS}" ] ; then yarn prod ; else mkdir -p dist/prod ; fi

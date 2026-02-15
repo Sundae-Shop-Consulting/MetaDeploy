@@ -1870,15 +1870,6 @@
   dependencies:
     fancy-test "^1.4.10"
 
-"@omnistudio/omniscript-lwc-compiler@^252.6.0":
-  version "252.6.0"
-  resolved "https://repo.vlocity.com/repository/vlocity-public/@omnistudio/omniscript-lwc-compiler/-/omniscript-lwc-compiler-252.6.0.tgz#566fd6dae2a0d2ce3dc89331aaa91a207d6501c1"
-  integrity sha512-wTUwtsyOAFpVLpoYInj3TJbg9M7PKYMEurealggbN11XE5WQCbupY2MH5whj5tq8a0EZs1UbkX72/7DPt+ovAA==
-  dependencies:
-    axios "^0.21.1"
-    buffer "^6.0.3"
-    jsdom "16.7.0"
-
 "@parcel/watcher-android-arm64@2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@parcel/watcher-android-arm64/-/watcher-android-arm64-2.5.0.tgz#e32d3dda6647791ee930556aee206fcd5ea0fb7a"

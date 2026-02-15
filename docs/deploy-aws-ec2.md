@@ -29,22 +29,31 @@ Before starting, you'll need:
 5. Scroll down and click "Generate a private key" - save the `.pem` file securely
 6. Install the app on your account, selecting the repositories you want MetaDeploy to access
 
-### 1.2 Create a Salesforce Connected App
+### 1.2 Create a Salesforce External Client App
 
-1. In Salesforce Setup, go to App Manager → New Connected App
-2. Configure:
-   - **Connected App Name:** `MetaDeploy`
-   - **API Name:** `MetaDeploy`
+Salesforce is phasing out Connected Apps in favor of External Client Apps starting with Spring '26. If you have an existing Connected App it will continue to work, but new setups should use External Client Apps.
+
+1. In Salesforce Setup, use Quick Find to search for **App Manager**
+2. Click **New External Client App**
+3. Fill in the basics:
+   - **Name:** `MetaDeploy`
    - **Contact Email:** Your email
-   - **Enable OAuth Settings:** Checked
-   - **Callback URL:** `https://your-domain.com/accounts/salesforce/login/callback/`
-     (use `http://YOUR_EC2_IP:8080/accounts/salesforce/login/callback/` if no domain)
-   - **Selected OAuth Scopes:**
-     - Full access (full)
-     - Perform requests at any time (refresh_token, offline_access)
-     - Access web-based services (web)
-3. Save and wait 2-10 minutes for propagation
-4. Note the **Consumer Key** and **Consumer Secret**
+   - **Distribution State:** Local
+4. Expand **Enable OAuth** and check the box to enable it
+5. Set the **Callback URL:** `https://your-domain.com/accounts/salesforce/login/callback/`
+   (use `http://YOUR_EC2_IP:8080/accounts/salesforce/login/callback/` if no domain yet).
+   If you haven't set up your EC2 instance yet, you can use `https://localhost:8080/accounts/salesforce/login/callback/` as a placeholder — Salesforce doesn't validate that the URL resolves, but it does require a fully-formed URL. Remember to update it to your real URL before attempting to log in through MetaDeploy.
+6. Add these **OAuth Scopes:**
+   - Full access (full)
+   - Perform requests at any time (refresh_token, offline_access)
+   - Manage user data via web browsers (web)
+7. Under security settings:
+   - **Deselect** "Require Proof Key for Code Exchange (PKCE)" — MetaDeploy does not currently send PKCE parameters in its OAuth flow, so this must be unchecked or authentication will fail. (See [Future improvement: PKCE support](#future-improvement-pkce-support) below.)
+   - **Select** "Require Secret for the Web Server Flow"
+   - **Select** "Require Secret for Refresh Token Flow"
+8. Save and wait 2-10 minutes for propagation
+9. To get your credentials: from the **External Client Apps Manager**, click the dropdown next to your app, select **Edit Settings**, expand the **OAuth Settings** section, and click **Consumer Key and Secret**
+10. Note the **Consumer Key** and **Consumer Secret**
 
 ## Part 2: Launch EC2 Instance
 
@@ -466,3 +475,24 @@ AWS_BUCKET_NAME=your-bucket-name
 ```
 
 4. Add these environment variables to the web service in `docker-compose.prod.yml`
+
+## Future improvement: PKCE support
+
+MetaDeploy uses django-allauth (v0.60.1) for Salesforce OAuth. Allauth supports PKCE as of v0.52.0, but MetaDeploy does not currently enable it. Adding PKCE support would allow enabling the "Require PKCE" setting on the External Client App, which is a security best practice for OAuth 2.0 authorization code flows.
+
+The change would be a one-line addition to `SOCIALACCOUNT_PROVIDERS` in `config/settings/base.py`:
+
+```python
+SOCIALACCOUNT_PROVIDERS = {
+    "salesforce": {
+        "SCOPE": ["web", "full", "refresh_token"],
+        "OAUTH_PKCE_ENABLED": True,  # Add this
+        "APP": {
+            "client_id": SFDX_CLIENT_ID,
+            "secret": SFDX_CLIENT_SECRET,
+        },
+    },
+}
+```
+
+Until this is implemented, "Require PKCE" must remain unchecked on the External Client App.
