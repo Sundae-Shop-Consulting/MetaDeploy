@@ -20,5 +20,6 @@ def env(request):
         "YEAR": datetime.utcnow().year,
         "SENTRY_DSN": settings.SENTRY_DSN,
         "SCRATCH_ORGS_AVAILABLE": bool(settings.DEVHUB_USERNAME),
+        "AUTH_PACKAGE_VERSION_ID": settings.AUTH_PACKAGE_VERSION_ID,
     }
     return {"GLOBALS": GLOBALS}

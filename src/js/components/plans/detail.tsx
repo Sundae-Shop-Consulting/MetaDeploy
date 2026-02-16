@@ -18,6 +18,7 @@ import PreflightResults, {
 } from '@/js/components/plans/preflightResults';
 import StepsTable from '@/js/components/plans/stepsTable';
 import Toasts from '@/js/components/plans/toasts';
+import AuthPackageBanner from '@/js/components/plans/authPackageBanner';
 import UserInfo from '@/js/components/plans/userInfo';
 import PlanNotAllowed from '@/js/components/products/notAllowed';
 import OldVersionWarning from '@/js/components/products/oldVersionWarning';
@@ -479,6 +480,9 @@ class PlanDetail extends Component<Props, State> {
                 <OldVersionWarning
                   link={routes.version_detail(product.slug, LATEST_VERSION)}
                 />
+              ) : null}
+              {!user && window.GLOBALS.AUTH_PACKAGE_VERSION_ID ? (
+                <AuthPackageBanner />
               ) : null}
               {preflight && (scratchOrg || user) ? (
                 <Toasts preflight={preflight} label="Pre-install validation" />

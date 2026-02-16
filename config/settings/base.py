@@ -556,3 +556,6 @@ if SENTRY_DSN:
 
 # MetaDeploy
 METADEPLOY_FAST_FORWARD = False
+
+# External Client App auth package (04t version ID)
+AUTH_PACKAGE_VERSION_ID = env("AUTH_PACKAGE_VERSION_ID", default="")
