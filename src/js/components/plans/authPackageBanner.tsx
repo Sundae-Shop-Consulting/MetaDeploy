@@ -33,29 +33,31 @@ class AuthPackageBanner extends Component<WithTranslation, State> {
       <ToastContainer>
         <Toast
           labels={{
-            heading: t('authPackageBanner'),
+            heading: [
+              t('authPackageBanner'),
+              ' ',
+              <a
+                key="production"
+                href={productionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t('authPackageInstallProduction')}
+              </a>,
+              ' | ',
+              <a
+                key="sandbox"
+                href={sandboxUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t('authPackageInstallSandbox')}
+              </a>,
+            ],
           }}
           variant="warning"
           onRequestClose={this.closeToast}
-        >
-          <div className="slds-m-top_x-small">
-            <a
-              href={productionUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t('authPackageInstallProduction')}
-            </a>
-            {' | '}
-            <a
-              href={sandboxUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t('authPackageInstallSandbox')}
-            </a>
-          </div>
-        </Toast>
+        />
       </ToastContainer>
     );
   }
