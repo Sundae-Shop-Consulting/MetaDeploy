@@ -16,7 +16,13 @@
 
     <!-- Page Info -->
     <title>{% block title %}{% if GLOBALS.SITE and GLOBALS.SITE.name %}{{ GLOBALS.SITE.name }}{% else %}MetaDeploy{% endif %}{% endblock %}</title>
-    <meta name="description" content="{% block description %}Web-based tool for installing Salesforce products{% endblock description %}" />
+    <meta name="description" content="{% block description %}{% if GLOBALS.SITE and GLOBALS.SITE.welcome_text %}{{ GLOBALS.SITE.welcome_text|striptags|truncatechars:160 }}{% else %}Web-based tool for installing Salesforce products{% endif %}{% endblock description %}" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{% if GLOBALS.SITE and GLOBALS.SITE.name %}{{ GLOBALS.SITE.name }}{% else %}MetaDeploy{% endif %}" />
+    <meta property="og:description" content="{% if GLOBALS.SITE and GLOBALS.SITE.welcome_text %}{{ GLOBALS.SITE.welcome_text|striptags|truncatechars:200 }}{% else %}Web-based tool for installing Salesforce products{% endif %}" />
+    <meta property="og:type" content="website" />
+    {% if GLOBALS.SITE and GLOBALS.SITE.company_logo %}<meta property="og:image" content="{{ GLOBALS.SITE.company_logo }}" />{% endif %}
 
     {% if GLOBALS.SENTRY_DSN %}
       <!-- Insert Sentry setup -->
