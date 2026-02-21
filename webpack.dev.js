@@ -12,7 +12,19 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const babel = require('@babel/core');
 const { merge } = require('webpack-merge');
 
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 const common = require('./webpack.common.js');
+
+const isStandalone = process.env.STANDALONE === '1';
+
+// In standalone mode, remove HtmlWebpackPlugin from common config
+// so we can replace it with our standalone template
+if (isStandalone) {
+  common.plugins = common.plugins.filter(
+    (p) => !(p instanceof HtmlWebpackPlugin),
+  );
+}
 
 module.exports = merge(common, {
   mode: 'development',
@@ -21,23 +33,49 @@ module.exports = merge(common, {
     path: path.join(__dirname, 'dist'),
   },
   devtool: 'inline-cheap-module-source-map',
-  devServer: {
-    devMiddleware: {
-      index: '',
-      publicPath: '/static/',
-      writeToDisk: true,
-    },
-    proxy: {
-      '**': 'http://localhost:8000',
-      '/ws/notifications': {
-        target: 'http://localhost:8000',
-        ws: true,
+  devServer: isStandalone
+    ? {
+        devMiddleware: {
+          publicPath: '/static/',
+          writeToDisk: true,
+        },
+        host: '0.0.0.0',
+        hot: false,
+        static: {
+          directory: path.join(__dirname, 'static'),
+          publicPath: '/static/',
+        },
+        historyApiFallback: {
+          rewrites: [{ from: /.*/, to: '/static/index.html' }],
+        },
+        setupMiddlewares(middlewares, devServer) {
+          // Return empty JSON for API calls so the app doesn't crash
+          devServer.app.use('/api/', (req, res) => {
+            res.json([]);
+          });
+          devServer.app.use('/accounts/', (req, res) => {
+            res.json({});
+          });
+          return middlewares;
+        },
+      }
+    : {
+        devMiddleware: {
+          index: '',
+          publicPath: '/static/',
+          writeToDisk: true,
+        },
+        proxy: {
+          '**': 'http://localhost:8000',
+          '/ws/notifications': {
+            target: 'http://localhost:8000',
+            ws: true,
+          },
+        },
+        host: '0.0.0.0',
+        hot: false,
+        static: false,
       },
-    },
-    host: '0.0.0.0',
-    hot: false,
-    static: false,
-  },
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css',
@@ -98,5 +136,12 @@ module.exports = merge(common, {
         }
       },
     }),
+    ...(isStandalone
+      ? [
+          new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'src', 'index.standalone.html'),
+          }),
+        ]
+      : []),
   ],
 });

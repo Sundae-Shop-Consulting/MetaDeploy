@@ -13,8 +13,8 @@
 }
 
 // need a small amount of contrast from progress bar background
-$progress-bar-color-background-fill-bar-light: rgb(37% 71% 100% / 50%);
-$progress-bar-color-background-fill-bar-dark: rgb(37% 71% 100% / 70%);
+$progress-bar-color-background-fill-bar-light: rgba(5, 175, 178, 0.5);
+$progress-bar-color-background-fill-bar-dark: rgba(5, 175, 178, 0.7);
 $progress-bar-loading-stripe-width: 10px;
 
 [role='progressbar'] {

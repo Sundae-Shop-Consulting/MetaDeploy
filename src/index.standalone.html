@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" class="slds-theme_default">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="language" content="en-us" />
+    <title>NPPatch</title>
+    <link rel="shortcut icon" href="/static/images/nppatch-favicon.png" />
+
+    <!-- Mock Django-injected globals -->
+    <script id="js-globals" type="application/json">
+      {
+        "SITE": {
+          "name": "NPPatch",
+          "company_name": "NPPatch",
+          "company_logo": "/static/images/nppatch-logo.svg",
+          "favicon": "/static/images/nppatch-favicon.png",
+          "welcome_text": "Community-Owned Salesforce for Nonprofits",
+          "copyright_notice": "&copy; 2026 NPPatch Contributors. Licensed under BSD-3-Clause.",
+          "show_metadeploy_wordmark": false,
+          "show_login": true
+        }
+      }
+    </script>
+    <script id="js-context" type="application/json">{}</script>
+    <!-- Mock api_urls so the app doesn't crash -->
+    <script type="text/javascript">
+      window.api_urls = {
+        ws_notifications: function() { return '/ws/notifications'; },
+        productcategory_list: function() { return '/api/productcategories/'; },
+        product_list: function() { return '/api/products/'; },
+        product_get_one: function() { return '/api/products/get_one/'; },
+        version_list: function() { return '/api/versions/'; },
+        version_get_one: function() { return '/api/versions/get_one/'; },
+        version_additional_plans: function() { return '/api/versions/additional_plans/'; },
+        plan_list: function() { return '/api/plans/'; },
+        plan_get_one: function() { return '/api/plans/get_one/'; },
+        plan_preflight: function() { return '/api/plans/preflight/'; },
+        plan_scratch_org: function() { return '/api/plans/scratch_org/'; },
+        job_list: function() { return '/api/jobs/'; },
+        job_detail: function(id) { return '/api/jobs/' + id + '/'; },
+        org_list: function() { return '/api/org/'; },
+        user: function() { return '/api/user/'; },
+        scratch_org_redirect: function(id) { return '/api/scratch_org/' + id + '/redirect/'; },
+        salesforce_login: function() { return '/accounts/salesforce/login/'; },
+        salesforce_production_login: function() { return '/accounts/salesforce-production/login/'; },
+        salesforce_custom_login: function() { return '/accounts/salesforce-custom/login/'; },
+        salesforce_sandbox_login: function() { return '/accounts/salesforce-sandbox/login/'; },
+        account_logout: function() { return '/accounts/logout/'; },
+      };
+    </script>
+  </head>
+  <body>
+    <main id="app" class="slds-grid slds-grid_vertical">
+      <div role="status" class="slds-spinner slds-spinner_large">
+        <span class="slds-assistive-text">Loading...</span>
+        <div class="slds-spinner__dot-a"></div>
+        <div class="slds-spinner__dot-b"></div>
+      </div>
+    </main>
+  </body>
+</html>

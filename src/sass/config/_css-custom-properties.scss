@@ -1,0 +1,74 @@
+// CSS Custom Property Overrides
+// ==============================
+// Override the precompiled SLDS CSS custom properties for brand colors.
+// The precompiled CSS uses var(--slds-g-color-brand-base-XX, <fallback>)
+// so setting these properties at :root overrides the Salesforce blue fallbacks.
+//
+// Many SLDS components also use component-level --slds-c-* variables with
+// hardcoded #0176d3 fallbacks that bypass the brand-base scale, so we
+// override those here as well.
+
+:root {
+  // Global brand color scale
+  --slds-g-color-brand-base-100: #ffffff;
+  --slds-g-color-brand-base-95: #e8f7f7;
+  --slds-g-color-brand-base-90: #d1f0f0;
+  --slds-g-color-brand-base-80: #a0dfe0;
+  --slds-g-color-brand-base-70: #6fcbcd;
+  --slds-g-color-brand-base-65: #4dbcbe;
+  --slds-g-color-brand-base-60: #1aa3a6;
+  --slds-g-color-brand-base-50: #05878a;
+  --slds-g-color-brand-base-40: #046b6d;
+  --slds-g-color-brand-base-30: #035052;
+  --slds-g-color-brand-base-20: #023638;
+  --slds-g-color-brand-base-15: #012a2b;
+  --slds-g-color-brand-base-10: #001d1e;
+
+  // Link colors
+  --slds-g-link-color: #05878a;
+  --slds-g-link-color-hover: #035052;
+  --slds-g-link-color-focus: #035052;
+
+  // Focus shadows
+  --slds-g-shadow-outset-focus-1: 0 0 3px #05878a;
+  --slds-g-shadow-outline-focus-1: 0 0 3px #05878a;
+
+  // Button text colors
+  --slds-c-button-text-color: #05878a;
+  --slds-c-button-text-color-hover: #035052;
+  --slds-c-button-text-color-active: #035052;
+
+  // Brand button
+  --slds-c-button-brand-color-background: #05878a;
+  --slds-c-button-brand-color-background-hover: #035052;
+  --slds-c-button-brand-color-background-active: #035052;
+  --slds-c-button-brand-color-border: #05878a;
+  --slds-c-button-brand-color-border-hover: #035052;
+
+  // Outline-brand button
+  --slds-c-button-outline-brand-color-border: #05878a;
+  --slds-c-button-outline-brand-color-border-hover: #05878a;
+  --sds-c-button-outline-brand-color-border-active: #05878a;
+
+  // Checkbox & radio
+  --slds-c-checkbox-mark-color-foreground: #05878a;
+  --slds-c-radio-mark-color-foreground: #05878a;
+
+  // Tabs
+  --slds-c-tabs-item-color-border-hover: #05878a;
+
+  // Slider
+  --slds-c-slider-thumb-color-foreground: #05878a;
+  --slds-c-slider-thumb-color-foreground-hover: #035052;
+  --slds-c-slider-thumb-color-foreground-focus: #035052;
+  --slds-c-slider-thumb-color-foreground-active: #035052;
+
+  // Icon
+  --slds-c-icon-color-background: #035052;
+}
+
+// Hardcoded color overrides for SLDS rules that don't use CSS variables
+.slds-dropdown_actions a,
+.slds-dropdown--actions a {
+  color: #05878a;
+}

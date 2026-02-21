@@ -1,0 +1,14 @@
+// NPPatch Brand Overrides
+// =======================
+// These SLDS token overrides must be imported BEFORE the SLDS design-tokens
+// so our values take precedence (SLDS tokens use !default).
+
+$brand-primary: #05878a;
+$brand-accessible: #05878a;
+$brand-primary-active: #05878a;
+$brand-accessible-active: #03555a;
+$brand-dark-active: #034143;
+$color-text-brand: #05878a;
+$progress-bar-color-background-fill: #05afb2;
+$brand-background-primary-transparent: rgba(5, 135, 138, 0.1);
+$brand-background-dark-transparent: rgba(5, 135, 138, 0.4);

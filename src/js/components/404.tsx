@@ -4,19 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
-import desertSvg from '@/img/desert.svg?raw';
 import Header from '@/js/components/header';
 import routes from '@/js/utils/routes';
 
 export const EmptyIllustration = ({ message }: { message: ReactNode }) => (
   <div className="slds-illustration slds-illustration_large">
-    <div
-      className="slds-m-vertical_xx-large"
-      dangerouslySetInnerHTML={{ __html: desertSvg }}
-    />
-    <h3 className="slds-illustration__header slds-text-heading_medium">
-      ¯\_(ツ)_/¯
-    </h3>
+    <div className="slds-m-vertical_xx-large slds-align_absolute-center">
+      <img
+        src="/static/images/empty-plot.png"
+        alt=""
+        style={{ maxHeight: '300px' }}
+      />
+    </div>
     <p className="slds-text-body_regular">{message}</p>
   </div>
 );
