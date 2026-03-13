@@ -333,7 +333,26 @@ class VersionDetail extends Component<VersionDetailProps> {
                           {t('authPackageLearnMore')}
                         </a>
                       </p>
-                      <p>{t('authPackageBanner')}</p>
+                      <p>
+                        {t('authPackageInstallPrompt')}{' '}
+                        <a
+                          href={`https://login.salesforce.com/packaging/installPackage.apexp?p0=${window.GLOBALS.AUTH_PACKAGE_VERSION_ID}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ fontWeight: 700 }}
+                        >
+                          {t('authPackageInstallProduction')}
+                        </a>
+                        {' | '}
+                        <a
+                          href={`https://test.salesforce.com/packaging/installPackage.apexp?p0=${window.GLOBALS.AUTH_PACKAGE_VERSION_ID}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ fontWeight: 700 }}
+                        >
+                          {t('authPackageInstallSandbox')}
+                        </a>
+                      </p>
                     </div>
                   )}
                 {!isCardLayout && (
