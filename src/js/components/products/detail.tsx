@@ -319,6 +319,23 @@ class VersionDetail extends Component<VersionDetailProps> {
               <BodySection>
                 {isCardLayout && this.getProductDescription(product)}
                 <p>{version.description}</p>
+                {!isCardLayout &&
+                  window.GLOBALS.AUTH_PACKAGE_VERSION_ID &&
+                  !user && (
+                    <div className="slds-text-color_weak slds-p-vertical_x-small">
+                      <p>
+                        {t('authPackageExplanation')}{' '}
+                        <a
+                          href="https://help.salesforce.com/s/articleView?id=005228017&type=1"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {t('authPackageLearnMore')}
+                        </a>
+                      </p>
+                      <p>{t('authPackageBanner')}</p>
+                    </div>
+                  )}
                 {!isCardLayout && (
                   <>
                     {primary_plan && visiblePrimaryPlan ? (

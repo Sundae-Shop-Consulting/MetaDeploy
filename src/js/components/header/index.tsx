@@ -44,10 +44,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 class Header extends Component<Props & PropsFromRedux> {
   controls = () => {
     const { user, doLogout, hideLogin } = this.props;
+    const hasAuthPackage = Boolean(window.GLOBALS.AUTH_PACKAGE_VERSION_ID);
     let header: ReactNode = null;
     if (user) {
       header = <Logout user={user} doLogout={doLogout} />;
-    } else if (!hideLogin) {
+    } else if (!hideLogin && !hasAuthPackage) {
       header = <Login />;
     }
     return <PageHeaderControl>{header}</PageHeaderControl>;

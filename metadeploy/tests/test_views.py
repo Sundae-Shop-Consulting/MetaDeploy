@@ -6,7 +6,11 @@ from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory
 from sfdo_template_helpers.oauth2.salesforce.views import SalesforcePermissionsError
 
-from ..views import custom_500_view, custom_permission_denied_view
+from ..views import (
+    AUTH_PACKAGE_ERROR_MSG,
+    custom_500_view,
+    custom_permission_denied_view,
+)
 
 
 @pytest.mark.django_db
@@ -53,3 +57,39 @@ def test_custom_500_view__ip_restricted_error(render):
             custom_500_view(request)
 
     assert allow_list == render.call_args[1]["context"]["JS_CONTEXT"]["error_message"]
+
+
+@pytest.mark.django_db
+@mock.patch("metadeploy.views.render")
+def test_custom_500_view__auth_package_configured(render, settings):
+    settings.AUTH_PACKAGE_VERSION_ID = "04t000000000000"
+    try:
+        raise OAuth2Error("Error retrieving access token: some other error")
+    except OAuth2Error:
+        factory = RequestFactory()
+        request = factory.get("/accounts/salesforce/login/callback/")
+        request.user = AnonymousUser()
+        custom_500_view(request)
+
+    assert (
+        render.call_args[1]["context"]["JS_CONTEXT"]["error_message"]
+        == AUTH_PACKAGE_ERROR_MSG
+    )
+
+
+@pytest.mark.django_db
+@mock.patch("metadeploy.views.render")
+def test_custom_500_view__no_auth_package_generic_error(render, settings):
+    settings.AUTH_PACKAGE_VERSION_ID = ""
+    try:
+        raise OAuth2Error("Error retrieving access token: some other error")
+    except OAuth2Error:
+        factory = RequestFactory()
+        request = factory.get("/accounts/salesforce/login/callback/")
+        request.user = AnonymousUser()
+        custom_500_view(request)
+
+    assert (
+        render.call_args[1]["context"]["JS_CONTEXT"]["error_message"]
+        == "An internal error occurred while processing your request."
+    )

@@ -1,66 +1,64 @@
-import Toast from '@salesforce/design-system-react/components/toast';
-import ToastContainer from '@salesforce/design-system-react/components/toast/container';
-import React, { Component } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-type State = {
-  isOpen: boolean;
+const HELP_ARTICLE_URL =
+  'https://help.salesforce.com/s/articleView?id=005228017&type=1';
+
+const AuthPackageBanner = () => {
+  const { t } = useTranslation();
+  const packageVersionId = window.GLOBALS.AUTH_PACKAGE_VERSION_ID;
+
+  if (!packageVersionId) {
+    return null;
+  }
+
+  const productionUrl = `https://login.salesforce.com/packaging/installPackage.apexp?p0=${packageVersionId}`;
+  const sandboxUrl = `https://test.salesforce.com/packaging/installPackage.apexp?p0=${packageVersionId}`;
+
+  return (
+    <div
+      className="slds-notify slds-notify_alert slds-alert_warning"
+      role="alert"
+      style={{
+        position: 'relative',
+        zIndex: 1,
+        textAlign: 'center',
+        padding: '0.5rem 1rem',
+        fontSize: '0.875rem',
+      }}
+    >
+      <p>
+        {t('authPackageExplanation')}{' '}
+        <a
+          href={HELP_ARTICLE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t('authPackageLearnMore')}
+        </a>
+      </p>
+      <p style={{ marginTop: '0.25rem' }}>
+        <span>{t('authPackageBanner')}</span>{' '}
+        <a
+          href={productionUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ fontWeight: 700 }}
+        >
+          {t('authPackageInstallProduction')}
+        </a>
+        {' | '}
+        <a
+          href={sandboxUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ fontWeight: 700 }}
+        >
+          {t('authPackageInstallSandbox')}
+        </a>
+      </p>
+    </div>
+  );
 };
 
-class AuthPackageBanner extends Component<WithTranslation, State> {
-  constructor(props: WithTranslation) {
-    super(props);
-    this.state = { isOpen: true };
-  }
-
-  closeToast = () => {
-    this.setState({ isOpen: false });
-  };
-
-  render() {
-    const { t } = this.props;
-    const { isOpen } = this.state;
-    const packageVersionId = window.GLOBALS.AUTH_PACKAGE_VERSION_ID;
-
-    if (!isOpen || !packageVersionId) {
-      return null;
-    }
-
-    const productionUrl = `https://login.salesforce.com/packaging/installPackage.apexp?p0=${packageVersionId}`;
-    const sandboxUrl = `https://test.salesforce.com/packaging/installPackage.apexp?p0=${packageVersionId}`;
-
-    return (
-      <ToastContainer>
-        <Toast
-          labels={{
-            heading: [
-              t('authPackageBanner'),
-              ' ',
-              <a
-                key="production"
-                href={productionUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {t('authPackageInstallProduction')}
-              </a>,
-              ' | ',
-              <a
-                key="sandbox"
-                href={sandboxUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {t('authPackageInstallSandbox')}
-              </a>,
-            ],
-          }}
-          variant="warning"
-          onRequestClose={this.closeToast}
-        />
-      </ToastContainer>
-    );
-  }
-}
-
-export default withTranslation()(AuthPackageBanner);
+export default AuthPackageBanner;
